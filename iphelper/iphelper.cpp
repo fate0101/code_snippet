@@ -1,7 +1,7 @@
 #include "iphelper.h"
 
-#pragma comment(lib,"Iphlpapi.lib") // ĞèÒªÌí¼ÓIphlpapi.lib¿â
-#pragma comment(lib,"Ws2_32.lib")   // ĞèÒªÌí¼ÓIphlpapi.lib¿â
+#pragma comment(lib,"Iphlpapi.lib") // éœ€è¦æ·»åŠ Iphlpapi.libåº“
+#pragma comment(lib,"Ws2_32.lib")   // éœ€è¦æ·»åŠ Iphlpapi.libåº“
 
 namespace net {
 iphelper::iphelper() {
@@ -15,8 +15,8 @@ iphelper::~iphelper() {
 
 
 // note. 
-//  ¸Ãº¯Êı¿ÉÄÜ×èÈû
-//  ¸Ãº¯Êı»ñÈ¡µÄÊÇ Ä¬ÈÏ(×Ô¶¯Ñ¡Ôñ) »ò ±»Ö¸¶¨µÄ¸ßÓÅÏÈ¼¶ Íø¿¨µÄ¹«Íøip
+//  è¯¥å‡½æ•°å¯èƒ½é˜»å¡
+//  è¯¥å‡½æ•°è·å–çš„æ˜¯ é»˜è®¤(è‡ªåŠ¨é€‰æ‹©) æˆ– è¢«æŒ‡å®šçš„é«˜ä¼˜å…ˆçº§ ç½‘å¡çš„å…¬ç½‘ip
 bool iphelper::getPublicNetIp_D() {
   bool           ret       = false;
   SOCKET         sock      = INVALID_SOCKET;
@@ -47,11 +47,11 @@ bool iphelper::getPublicNetIp_D() {
 
   destAddr.sin_addr.S_un.S_addr = inet_addr(rip);
 
-  // ²»¿¼ÂÇ¼«¶ËÍøÂçÇé¿ö
+  // ä¸è€ƒè™‘æç«¯ç½‘ç»œæƒ…å†µ
   if (S_OK != connect(sock, (struct sockaddr*)&destAddr, sizeof(destAddr)))
     goto __ret;
 
-  // ²»¿¼ÂÇ·¢ËÍ»º³åºÄ¾¡µÄÇé¿ö
+  // ä¸è€ƒè™‘å‘é€ç¼“å†²è€—å°½çš„æƒ…å†µ
   if (SOCKET_ERROR == send(sock, request, (int)strlen(request), 0))
     goto __ret;
 
@@ -61,7 +61,7 @@ bool iphelper::getPublicNetIp_D() {
   receiver.resize(500);
 
   while ((recv_size = recv(sock, (char*)receiver.c_str(), 500, 0)) > 0) {
-    // ÓÀÔ¶Ô¤·ÖÅä 500 ×Ö½Ú
+    // æ°¸è¿œé¢„åˆ†é… 500 å­—èŠ‚
     receiver.resize(receiver.size() + recv_size);
   }
 
@@ -82,7 +82,7 @@ __ret:
 }
 
 bool iphelper::getLocalInfo() {
-
+  bool ret = false;
   PIP_ADAPTER_INFO pIpAdapterInfo = new IP_ADAPTER_INFO();
   unsigned long stSize = sizeof(IP_ADAPTER_INFO);
   int nRel = GetAdaptersInfo(pIpAdapterInfo, &stSize);
@@ -135,7 +135,7 @@ bool iphelper::getLocalInfo() {
       break;
     }
 
-    // ²ğ¿ª ¼õÉÙÑ­»·ÄÚ²¿µÄ if ¿ªÏú
+    // æ‹†å¼€ å‡å°‘å¾ªç¯å†…éƒ¨çš„ if å¼€é”€
     char c[4] = { 0 };
     for (size_t i = 0; i < pIpAdapterInfo->AddressLength - 1; i++) {
       memset(c, 0, 4);
@@ -163,12 +163,14 @@ bool iphelper::getLocalInfo() {
     pIpAdapterInfo = pIpAdapterInfo->Next;
   }
 
+  ret = true;
+  
 __ret:
-  // ÊÍ·ÅÄÚ´æ¿Õ¼ä
+  // é‡Šæ”¾å†…å­˜ç©ºé—´
   if (pIpAdapterInfo)
     delete pIpAdapterInfo;
 
-  return true;
+  return ret;
 }
 
 };  // net
