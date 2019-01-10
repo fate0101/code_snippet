@@ -3,9 +3,6 @@
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
-#include <WinSock2.h>
-#include <ws2tcpip.h>
-#include <Iphlpapi.h>
 #include <iostream>
 #include <vector>
 
@@ -18,11 +15,11 @@ typedef struct _IP_INFO {
 } IP_INFO;
 
 typedef struct _NETCARD_INFO {
-  std::string name;             // Ãû×Ö
-  std::string des;              // ÃèÊö
-  std::string type;             // ÀàĞÍ
+  std::string name;             // åå­—
+  std::string des;              // æè¿°
+  std::string type;             // ç±»å‹
 
-  size_t      rtype;            // Êı×Ö°æ ÀàĞÍ
+  size_t      rtype;            // æ•°å­—ç‰ˆ ç±»å‹
 
   std::string mac;              // mac
   std::vector<IP_INFO> ipis;    // ip info
