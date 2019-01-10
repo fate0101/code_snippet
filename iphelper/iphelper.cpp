@@ -101,9 +101,8 @@ bool iphelper::getLocalInfo() {
     nRel = GetAdaptersInfo(pIpAdapterInfo, &stSize);
   }
     
-  if (ERROR_SUCCESS != nRel) {
+  if (ERROR_SUCCESS != nRel)
     goto __ret;
-  }
 
   while (pIpAdapterInfo) {
     NETCARD_INFO card;
@@ -149,6 +148,7 @@ bool iphelper::getLocalInfo() {
     sprintf_s(c, 3, "%02X", pIpAdapterInfo->Address[pIpAdapterInfo->AddressLength - 1]);
     card.mac += c;
  
+    // 枚举适配器ip相关信息
     IP_ADDR_STRING *pIpAddrString = &(pIpAdapterInfo->IpAddressList);
     do
     {
