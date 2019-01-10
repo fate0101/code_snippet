@@ -1,5 +1,9 @@
 #include "iphelper.h"
 
+#include <WinSock2.h>
+#include <ws2tcpip.h>
+#include <Iphlpapi.h>
+
 #pragma comment(lib,"Iphlpapi.lib") // 需要添加Iphlpapi.lib库
 #pragma comment(lib,"Ws2_32.lib")   // 需要添加Iphlpapi.lib库
 
