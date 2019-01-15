@@ -29,7 +29,6 @@ F_STAT_REALLOC(ins_realloc_d, p, ns) {
 }
 
 F_STAT_FREE(ins_free_d, p) {
-
   F_STAT_ARG(d, f);
   F_DBG(d, "%s \r\n", f);
   mf_count--;
