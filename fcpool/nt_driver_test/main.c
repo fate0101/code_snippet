@@ -16,26 +16,26 @@ void _cdecl dbgp(const char* fmt, ...) {
 	KdPrint((tb));
 }
 
-F_STAT_MALLOC(alloc_s) {
-	F_STAT_ARG_2(n, f);
+F_STAT_MALLOC(alloc_s, s) {
+	F_STAT_ARG(n, f);
 	return ExAllocatePoolWithTag(PagedPool, s, 'fcp');
 }
 
-F_STAT_FREE(free_s) {
-	F_STAT_ARG_2(n, f);
+F_STAT_FREE(free_s, p) {
+	F_STAT_ARG(n, f);
 	ExFreePoolWithTag(p, 'fcp');
 }
 
-F_STAT_REALLOC(realloc_s) {
-	F_STAT_ARG_3(n, f, s);
+F_STAT_REALLOC(realloc_s, p, ns) {
+	F_STAT_ARG(n, f);
 	size_t os = GET_SIZE_BY_POINTER(p);
 
-	void* np = ExAllocatePoolWithTag(PagedPool, s, 'fcp');
+	void* np = ExAllocatePoolWithTag(PagedPool, ns, 'fcp');
 	if (NULL == np)
 		return np;
 
 	// 选短的那个
-	RtlCopyMemory(np, p, s <= os ? s : os);
+	RtlCopyMemory(np, p, ns <= os ? ns : os);
 
 	ExFreePoolWithTag(p, 'fcp');
 	return np;
