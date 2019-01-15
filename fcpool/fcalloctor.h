@@ -67,7 +67,7 @@ typedef struct _M_ENV {
 
   struct { 
     MALLOC         malloc_fn;                // 默认分配器
-	  FREE           free_fn;
+    FREE           free_fn;
     REALLOC        realloc_fn;
 
     ERR_HANDLER    alloc_failed_handler;     // 尝试恢复
