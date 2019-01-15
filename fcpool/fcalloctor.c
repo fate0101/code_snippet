@@ -411,15 +411,12 @@ int InitAllocator(PM_ENV m_env) {
     m_env->ins.malloc_fn  = ins_malloc_d;
     m_env->ins.realloc_fn = ins_realloc_d;
     m_env->ins.free_fn    = ins_free_d;
-
+    F_SET_DBG(m_env, inc_output_d);
 
 #ifdef FC_MEM_MUTIL_THREAD
     // no define
 #endif  // FC_MEM_MUTIL_THREAD
    
-	F_SET_DBG(m_env, inc_output_d);
-
-
     // error handler
     m_env->ins.BSOD                 = ins_BSOD_d;
     m_env->ins.alloc_failed_handler = ins_alloc_failed_handler_d;
