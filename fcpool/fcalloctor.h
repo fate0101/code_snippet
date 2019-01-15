@@ -106,6 +106,7 @@ void  DestoryAllocator(PM_ENV m_env);
 #define FDestoryAllocator(x)  DestoryAllocator(&x)
 
 
+// 用于快速配置的宏
 #ifdef FC_MEM_DBG
 
 #define F_STAT_MALLOC(x)    void* _cdecl x(void* m_env, const char* flag, size_t s)
@@ -126,7 +127,5 @@ void  DestoryAllocator(PM_ENV m_env);
 #define F_SET_DBG(x,y)
 #define F_DBG(x, ...)
 #endif  // FC_MEM_DBG
-
-#define F_STAT_OUTPUTDBG(x) void  _cdecl x(const char* fmt, ...)
 
 #endif  // fcalloctor_h

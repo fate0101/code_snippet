@@ -6,7 +6,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-F_STAT_OUTPUTDBG(inc_output_d) {
+void  _cdecl inc_output_d(const char* fmt, ...) {
   va_list vArgList;
   va_start(vArgList, fmt);
   vprintf(fmt, vArgList);
@@ -20,7 +20,7 @@ F_STAT_MALLOC(ins_malloc_d) {
   F_STAT_ARG(d, f);
  
   if (d) {
-    F_DBG(d, "%s 0x%08X\r\n", flag, s);
+    F_DBG(d, "%s 0x%016X\r\n", flag, s);
   }
 
   mf_count++;
@@ -31,7 +31,7 @@ F_STAT_REALLOC(ins_realloc_d) {
   F_STAT_ARG(d, f);
 
   if (d) {
-    F_DBG(d, "%s 0x%08X\r\n", flag, ns);
+    F_DBG(d, "%s 0x%16X\r\n", flag, ns);
   }
   return realloc(p, ns);
 }
@@ -87,7 +87,7 @@ void Test1() {
 
   FDestoryAllocator(m_env);
 
-  printf("mf_count : %d\r\n", mf_count);
+  printf("mf_count : %zd\r\n", mf_count);
   system("pause");
 }
 
