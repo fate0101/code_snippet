@@ -113,7 +113,8 @@ void  DestoryAllocator(PM_ENV m_env);
 #define F_STAT_FREE(x)      void  _cdecl x(void* m_env, const char* flag, void* p)
 #define F_STAT_REALLOC(x)   void* _cdecl x(void* m_env, const char* flag, void* p, size_t ns)
 
-#define F_STAT_ARG(x, y)    PM_ENV x = m_env; const char* y = flag;do{x,y;}while(0)
+#define F_STAT_ARG_2(x, y)    PM_ENV x = m_env; const char* y = flag;do{x,y;}while(0)
+#define F_STAT_ARG_3(x, y, z) PM_ENV x = m_env; const char* y = flag; size_t z = ns; do{x,y,z;}while(0)
 #define F_SET_DBG(x, y)     do{if (NULL != (x)) (x)->ins.putstring_fn = y;}while(0)
 #define F_DBG(x, ...)       do{if (NULL != (x) && NULL != (x)->ins.putstring_fn) (x)->ins.putstring_fn(__VA_ARGS__);}while(0)
 
@@ -123,7 +124,8 @@ void  DestoryAllocator(PM_ENV m_env);
 #define F_STAT_FREE(x)      void  _cdecl x(void* p)
 #define F_STAT_REALLOC(x)   void* _cdecl x(void* p, size_t ns)
 
-#define F_STAT_ARG(x, y)    PM_ENV x = NULL; const char* y = NULL;do{x,y;}while(0)
+#define F_STAT_ARG_2(x, y)    PM_ENV x = NULL; const char* y = NULL;do{x,y;}while(0)
+#define F_STAT_ARG_3(x, y, z) PM_ENV x = NULL; const char* y = NULL; size_t z = ns; do{x,y,z;}while(0)
 #define F_SET_DBG(x,y)
 #define F_DBG(x, ...)
 #endif  // FC_MEM_DBG
