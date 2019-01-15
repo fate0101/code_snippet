@@ -32,7 +32,7 @@ typedef  void*   (_cdecl *REALLOC)  (void* m_env, const char* flag, void* p, siz
   默认分配器
 */
 typedef  void*   (_cdecl *MALLOC)  (size_t s);
-typedef  void    (_cdecl *FREE)    ();
+typedef  void    (_cdecl *FREE)    (void* p);
 typedef  void*   (_cdecl *REALLOC) (void* p, size_t ns);
 
 #endif  // FC_MEM_DBG
