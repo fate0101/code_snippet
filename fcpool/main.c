@@ -16,33 +16,22 @@ void  _cdecl inc_output_d(const char* fmt, ...) {
 static size_t mf_count = 0;
 
 F_STAT_MALLOC(ins_malloc_d) {
-
   F_STAT_ARG(d, f);
- 
-  if (d) {
-    F_DBG(d, "%s 0x%016X\r\n", flag, s);
-  }
-
+  F_DBG(d, "%s 0x%016X\r\n", flag, s);
   mf_count++;
   return malloc(s);
 }
 
 F_STAT_REALLOC(ins_realloc_d) {
   F_STAT_ARG(d, f);
-
-  if (d) {
-    F_DBG(d, "%s 0x%16X\r\n", flag, ns);
-  }
+  F_DBG(d, "%s 0x%16X\r\n", flag, ns);
   return realloc(p, ns);
 }
 
 F_STAT_FREE(ins_free_d) {
 
   F_STAT_ARG(d, f);
-  if (d) {
-   F_DBG(d, "%s \r\n", flag);
-  }
-
+  F_DBG(d, "%s \r\n", flag);
   mf_count--;
   free(p);
 }
@@ -68,7 +57,7 @@ void Test1() {
   m_env.ins.realloc_fn  = ins_realloc_d;
   m_env.ins.BSOD        = BSOD;
 
-  F_SET_DBG(m_env, inc_output_d);
+  F_SET_DBG(&m_env, inc_output_d);
 
   if (!FC_SUCCESS(FInitAllocator(m_env))) {
     printf("init error\r\n");
@@ -87,7 +76,10 @@ void Test1() {
 
   FDestoryAllocator(m_env);
 
+#ifndef FC_MEM_DBG
   printf("mf_count : %zd\r\n", mf_count);
+#endif
+
   system("pause");
 }
 

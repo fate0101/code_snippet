@@ -362,53 +362,44 @@ static void ins_BSOD_d() {
   return;
 }
 
-#ifndef FC_MEM_DBG
+static F_STAT_MALLOC(ins_malloc_d) {
+  F_STAT_ARG(d, f);
+  F_DBG(d, "%s 0x%016X\r\n", flag, s);
 
-static void* ins_malloc_d(size_t s) {
-  return malloc(s);
-}
-
-static void* ins_realloc_d(void* p, size_t s) {
-  return realloc(p, s);
-}
-
-static void ins_free_d(void* p) {
-  free(p);
-}
-
-#else
-
-static void inc_output_d(const char* fmt, ...) {
-  va_list vArgList;
-  va_start(vArgList, fmt);
-  vprintf(fmt, vArgList);
-  va_end(vArgList);
-
-}
-
-static void* ins_malloc_d(void* m_env, const char* flag, size_t s) {
-  PM_ENV m_env_dbg = (PM_ENV)m_env;
-  m_env_dbg->ins.putstring_fn("%s 0x%08X\r\n", flag, s);
+#ifdef FC_MEM_DBG
   mf_count++;
+#endif
+
   return malloc(s);
 }
 
-static void* ins_realloc_d(void* m_env, const char* flag, void* p, size_t s) {
-  PM_ENV m_env_dbg = (PM_ENV)m_env;
-  m_env_dbg->ins.putstring_fn("%s 0x%08X\r\n", flag, s);
-  return realloc(p, s);
+static F_STAT_REALLOC(ins_realloc_d) {
+  F_STAT_ARG(d, f);
+  F_DBG(d, "%s 0x%16X\r\n", flag, ns);
+  return realloc(p, ns);
 }
 
-static void ins_free_d(void* m_env, const char* flag, void* p) {
-  PM_ENV m_env_dbg = (PM_ENV)m_env;
-  m_env_dbg->ins.putstring_fn("%s \r\n", flag);
+static F_STAT_FREE(ins_free_d) {
+  F_STAT_ARG(d, f);
+  F_DBG(d, "%s \r\n", flag);
+
+#ifdef FC_MEM_DBG
   mf_count--;
+#endif
+
   free(p);
 }
 
-#endif  // FC_MEM_DBG
 #endif  // FC_MEM_DEFAULT
 
+#ifdef FC_MEM_DBG
+static void inc_output_d(const char* fmt, ...) {
+	va_list vArgList;
+	va_start(vArgList, fmt);
+	vprintf(fmt, vArgList);
+	va_end(vArgList);
+}
+#endif  // FC_MEM_DBG
 
 
 int InitAllocator(PM_ENV m_env) {
@@ -426,9 +417,7 @@ int InitAllocator(PM_ENV m_env) {
     // no define
 #endif  // FC_MEM_MUTIL_THREAD
    
-#ifdef FC_MEM_DBG
-    m_env->ins.putstring_fn = inc_output_d;
-#endif  // FC_MEM_DBG
+	F_SET_DBG(m_env, inc_output_d);
 
 
     // error handler
@@ -488,10 +477,5 @@ void DestoryAllocator(PM_ENV m_env) {
 
   }
 
-#ifdef FC_MEM_DBG
-#ifdef FC_MEM_DEFAULT
-  m_env->ins.putstring_fn("mf_count : %d\r\n", mf_count);
-#endif  // FC_MEM_DEFAULT
-#endif  // FC_MEM_DBG
-
+  F_DBG(m_env, "mf_count : %d\r\n", mf_count);
 }
