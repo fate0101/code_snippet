@@ -6,7 +6,7 @@
 
 static char tb[200] = { 0 };
 
-F_STAT_OUTPUTDBG(dbgp) {
+void _cdecl dbgp(const char* fmt, ...) {
 
 	va_list vArgList;
 	va_start(vArgList, fmt);
