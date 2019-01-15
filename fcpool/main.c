@@ -17,21 +17,21 @@ static size_t mf_count = 0;
 
 F_STAT_MALLOC(ins_malloc_d) {
   F_STAT_ARG(d, f);
-  F_DBG(d, "%s 0x%016X\r\n", flag, s);
+  F_DBG(d, "%s 0x%016X\r\n", f, s);
   mf_count++;
   return malloc(s);
 }
 
 F_STAT_REALLOC(ins_realloc_d) {
   F_STAT_ARG(d, f);
-  F_DBG(d, "%s 0x%16X\r\n", flag, ns);
+  F_DBG(d, "%s 0x%16X\r\n", f, ns);
   return realloc(p, ns);
 }
 
 F_STAT_FREE(ins_free_d) {
 
   F_STAT_ARG(d, f);
-  F_DBG(d, "%s \r\n", flag);
+  F_DBG(d, "%s \r\n", f);
   mf_count--;
   free(p);
 }
