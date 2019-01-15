@@ -27,6 +27,13 @@ typedef  void*   (_cdecl *MALLOC)   (void* m_env, const char* flag, size_t s);
 typedef  void    (_cdecl *FREE)     (void* m_env, const char* flag, void* p);
 typedef  void*   (_cdecl *REALLOC)  (void* m_env, const char* flag, void* p, size_t ns);
 
+
+#define F_STAT_MALLOC(x)    void* _cdecl x(void* m_env, const char* flag, size_t s)
+#define F_STAT_FREE(x)      void  _cdecl x(void* m_env, const char* flag, void* p)
+#define F_STAT_REALLOC(x)   void* _cdecl x(void* m_env, const char* flag, void* p, size_t ns)
+
+#define F_STAT_ARG(x, y)    do{void* x = m_env; const char* y = flag;x,y;}while(0)
+#define F_SET_DBG(x,y)      do{x.ins.putstring = y;}while(0)
 #else
 /*
   默认分配器
@@ -35,8 +42,16 @@ typedef  void*   (_cdecl *MALLOC)  (size_t s);
 typedef  void    (_cdecl *FREE)    (void* p);
 typedef  void*   (_cdecl *REALLOC) (void* p, size_t ns);
 
+#define F_STAT_MALLOC(x)    void* _cdecl x(size_t s)
+#define F_STAT_FREE(x)      void  _cdecl x(void* p)
+#define F_STAT_REALLOC(x)   void* _cdecl x(void* p, size_t ns)
+
+#define F_STAT_ARG(x, y)    do{void* x = NULL; const char* y = NULL;x,y;}while(0)
+#define F_SET_DBG(x,y)
+
 #endif  // FC_MEM_DBG
 
+#define F_STAT_OUTPUTDBG(x) void  _cdecl x(const char* fmt, ...)
 
 // 内存标志
 struct _block {
