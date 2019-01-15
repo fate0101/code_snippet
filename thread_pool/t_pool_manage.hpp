@@ -108,7 +108,6 @@ private:
   std::future<void>* ths_;
   std::mutex mtx_;
   std::condition_variable cv_;
-  // block_queue<taskFun> task_;
   std::queue<taskFun> task_;
   bool stop_;
 };
