@@ -76,7 +76,7 @@ typedef struct _M_ENV {
     ERR_HANDLER    BSOD;                     // 错误处理
 
 #ifdef FC_MEM_DBG
-    OUTPUTDBG      putstring;                // 调试输出
+    OUTPUTDBG      putstring_fn;                // 调试输出
 #endif
 
 #ifdef MUTIL_THREAD
@@ -114,8 +114,8 @@ void  DestoryAllocator(PM_ENV m_env);
 #define F_STAT_REALLOC(x)   void* _cdecl x(void* m_env, const char* flag, void* p, size_t ns)
 
 #define F_STAT_ARG(x, y)    PM_ENV x = m_env; const char* y = flag;do{x,y;}while(0)
-#define F_SET_DBG(x, y)     do{x.ins.putstring = y;}while(0)
-#define F_DBG(x, ...)       do{x->ins.putstring(__VA_ARGS__);}while(0)
+#define F_SET_DBG(x, y)     do{x.ins.putstring_fn = y;}while(0)
+#define F_DBG(x, ...)       do{x->ins.putstring_fn(__VA_ARGS__);}while(0)
 
 #else
 
