@@ -17,25 +17,25 @@ void _cdecl dbgp(const char* fmt, ...) {
 }
 
 F_STAT_MALLOC(alloc_s) {
-	F_STAT_ARG(n, f);
+	F_STAT_ARG_2(n, f);
 	return ExAllocatePoolWithTag(PagedPool, s, 'fcp');
 }
 
 F_STAT_FREE(free_s) {
-	F_STAT_ARG(n, f);
+	F_STAT_ARG_2(n, f);
 	ExFreePoolWithTag(p, 'fcp');
 }
 
 F_STAT_REALLOC(realloc_s) {
-	F_STAT_ARG(n, f);
+	F_STAT_ARG_3(n, f, s);
 	size_t os = GET_SIZE_BY_POINTER(p);
 
-	void* np = ExAllocatePoolWithTag(PagedPool, ns, 'fcp');
+	void* np = ExAllocatePoolWithTag(PagedPool, s, 'fcp');
 	if (NULL == np)
 		return np;
 
 	// 选短的那个
-	RtlCopyMemory(np, p, ns <= os ? ns : os);
+	RtlCopyMemory(np, p, s <= os ? s : os);
 
 	ExFreePoolWithTag(p, 'fcp');
 	return np;
