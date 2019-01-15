@@ -1,20 +1,33 @@
 ﻿#include <ntddk.h>
-
 #include "fcalloctor.h"
 
-void unload(PDRIVER_OBJECT obj) {
-	obj;
+#include <stdio.h>
+#include <stdarg.h>
+
+static char tb[200] = { 0 };
+
+F_STAT_OUTPUTDBG(dbgp) {
+
+	va_list vArgList;
+	va_start(vArgList, fmt);
+	_vsnprintf_s(tb, 200, _TRUNCATE, fmt, vArgList);
+	va_end(vArgList);
+
+	KdPrint((tb));
 }
 
-void* _cdecl alloc_s(size_t s){
+F_STAT_MALLOC(alloc_s) {
+	F_STAT_ARG(n, f);
 	return ExAllocatePoolWithTag(PagedPool, s, 'fcp');
 }
 
-void _cdecl free_s(void* p) {
+F_STAT_FREE(free_s) {
+	F_STAT_ARG(n, f);
 	ExFreePoolWithTag(p, 'fcp');
 }
 
-void* _cdecl realloc_s(void* p, size_t ns) {
+F_STAT_REALLOC(realloc_s) {
+	F_STAT_ARG(n, f);
 	size_t os = GET_SIZE_BY_POINTER(p);
 
 	void* np = ExAllocatePoolWithTag(PagedPool, ns, 'fcp');
@@ -33,6 +46,11 @@ void BSOD() {
 	return;
 }
 
+
+void unload(PDRIVER_OBJECT obj) {
+	obj;
+}
+
 NTSTATUS DriverEntry(PDRIVER_OBJECT obj, PUNICODE_STRING reg_path) {
 	reg_path;
 
@@ -44,6 +62,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT obj, PUNICODE_STRING reg_path) {
 	m_env.ins.free_fn    = free_s;
 	m_env.ins.realloc_fn = realloc_s;
 	m_env.ins.BSOD       = BSOD;
+	F_SET_DBG(m_env, dbgp);
 
 	if (!FC_SUCCESS(FInitAllocator(m_env))) {
 		return STATUS_UNSUCCESSFUL;

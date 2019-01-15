@@ -28,7 +28,7 @@
 /*
   是否打印调试日志
 */
-// #define FC_MEM_DBG
+#define FC_MEM_DBG
 
 /*
   来自 fcerr
