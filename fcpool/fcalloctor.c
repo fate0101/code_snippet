@@ -388,20 +388,20 @@ static void inc_output_d(const char* fmt, ...) {
 
 static void* ins_malloc_d(void* m_env, const char* flag, size_t s) {
   PM_ENV m_env_dbg = (PM_ENV)m_env;
-  m_env_dbg->ins.putstring("%s 0x%08X\r\n", flag, s);
+  m_env_dbg->ins.putstring_fn("%s 0x%08X\r\n", flag, s);
   mf_count++;
   return malloc(s);
 }
 
 static void* ins_realloc_d(void* m_env, const char* flag, void* p, size_t s) {
   PM_ENV m_env_dbg = (PM_ENV)m_env;
-  m_env_dbg->ins.putstring("%s 0x%08X\r\n", flag, s);
+  m_env_dbg->ins.putstring_fn("%s 0x%08X\r\n", flag, s);
   return realloc(p, s);
 }
 
 static void ins_free_d(void* m_env, const char* flag, void* p) {
   PM_ENV m_env_dbg = (PM_ENV)m_env;
-  m_env_dbg->ins.putstring("%s \r\n", flag);
+  m_env_dbg->ins.putstring_fn("%s \r\n", flag);
   mf_count--;
   free(p);
 }
@@ -427,7 +427,7 @@ int InitAllocator(PM_ENV m_env) {
 #endif  // FC_MEM_MUTIL_THREAD
    
 #ifdef FC_MEM_DBG
-    m_env->ins.putstring = inc_output_d;
+    m_env->ins.putstring_fn = inc_output_d;
 #endif  // FC_MEM_DBG
 
 
@@ -463,7 +463,7 @@ int InitAllocator(PM_ENV m_env) {
 #endif  // FC_MEM_MUTIL_THREAD
 
 #ifdef FC_MEM_DBG
-  assert(NULL != m_env->ins.putstring);
+  assert(NULL != m_env->ins.putstring_fn);
 #endif  // FC_MEM_DBG
 
 #endif  // FC_ASSERT
@@ -490,7 +490,7 @@ void DestoryAllocator(PM_ENV m_env) {
 
 #ifdef FC_MEM_DBG
 #ifdef FC_MEM_DEFAULT
-  m_env->ins.putstring("mf_count : %d\r\n", mf_count);
+  m_env->ins.putstring_fn("mf_count : %d\r\n", mf_count);
 #endif  // FC_MEM_DEFAULT
 #endif  // FC_MEM_DBG
 
