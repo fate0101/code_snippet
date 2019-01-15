@@ -362,8 +362,8 @@ static void ins_BSOD_d() {
   return;
 }
 
-static F_STAT_MALLOC(ins_malloc_d) {
-  F_STAT_ARG_2(d, f);
+static F_STAT_MALLOC(ins_malloc_d, s) {
+  F_STAT_ARG(d, f);
   F_DBG(d, "%s 0x%016X\r\n", f, s);
 
 #ifdef FC_MEM_DBG
@@ -373,14 +373,14 @@ static F_STAT_MALLOC(ins_malloc_d) {
   return malloc(s);
 }
 
-static F_STAT_REALLOC(ins_realloc_d) {
-  F_STAT_ARG_3(d, f, s);
-  F_DBG(d, "%s 0x%16X\r\n", f, s);
-  return realloc(p, s);
+static F_STAT_REALLOC(ins_realloc_d, p, ns) {
+  F_STAT_ARG(d, f);
+  F_DBG(d, "%s 0x%16X\r\n", f, ns);
+  return realloc(p, ns);
 }
 
-static F_STAT_FREE(ins_free_d) {
-  F_STAT_ARG_2(d, f);
+static F_STAT_FREE(ins_free_d, p) {
+  F_STAT_ARG(d, f);
   F_DBG(d, "%s \r\n", f);
 
 #ifdef FC_MEM_DBG

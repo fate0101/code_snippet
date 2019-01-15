@@ -109,23 +109,21 @@ void  DestoryAllocator(PM_ENV m_env);
 // 用于快速配置的宏
 #ifdef FC_MEM_DBG
 
-#define F_STAT_MALLOC(x)      void* _cdecl x(void* m_env, const char* flag, size_t s)
-#define F_STAT_FREE(x)        void  _cdecl x(void* m_env, const char* flag, void* p)
-#define F_STAT_REALLOC(x)     void* _cdecl x(void* m_env, const char* flag, void* p, size_t ns)
+#define F_STAT_MALLOC(x,y)    void* _cdecl x(void* m_env, const char* flag, size_t y)
+#define F_STAT_FREE(x,y)      void  _cdecl x(void* m_env, const char* flag, void* y)
+#define F_STAT_REALLOC(x,y,z) void* _cdecl x(void* m_env, const char* flag, void* y, size_t z)
 
-#define F_STAT_ARG_2(x,y)     PM_ENV x = m_env; const char* y = flag; do{x,y;}while(0)
-#define F_STAT_ARG_3(x,y,z)   PM_ENV x = m_env; const char* y = flag; size_t z = ns; do{x,y,z;}while(0)
+#define F_STAT_ARG(x,y)       PM_ENV x = m_env; const char* y = flag; do{x,y;}while(0)
 #define F_SET_DBG(x,y)        do{if (NULL != (x)) (x)->ins.putstring_fn = y;}while(0)
 #define F_DBG(x, ...)         do{if (NULL != (x) && NULL != (x)->ins.putstring_fn) (x)->ins.putstring_fn(__VA_ARGS__);}while(0)
 
 #else
 
-#define F_STAT_MALLOC(x)      void* _cdecl x(size_t s)
-#define F_STAT_FREE(x)        void  _cdecl x(void* p)
-#define F_STAT_REALLOC(x)     void* _cdecl x(void* p, size_t ns)
+#define F_STAT_MALLOC(x,y)    void* _cdecl x(size_t y)
+#define F_STAT_FREE(x,y)      void  _cdecl x(void* y)
+#define F_STAT_REALLOC(x,y,z) void* _cdecl x(void* y, size_t z)
 
-#define F_STAT_ARG_2(x,y)     PM_ENV x = NULL; const char* y = NULL; do{x,y;}while(0)
-#define F_STAT_ARG_3(x,y,z)   PM_ENV x = NULL; const char* y = NULL; size_t z = ns; do{x,y,z;}while(0)
+#define F_STAT_ARG(x,y)       PM_ENV x = NULL; const char* y = NULL; do{x,y;}while(0)
 #define F_SET_DBG(x,y)
 #define F_DBG(x, ...)
 #endif  // FC_MEM_DBG
