@@ -62,7 +62,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT obj, PUNICODE_STRING reg_path) {
 	m_env.ins.free_fn    = free_s;
 	m_env.ins.realloc_fn = realloc_s;
 	m_env.ins.BSOD       = BSOD;
-	F_SET_DBG(m_env, dbgp);
+	F_SET_DBG(&m_env, dbgp);
 
 	if (!FC_SUCCESS(FInitAllocator(m_env))) {
 		return STATUS_UNSUCCESSFUL;
