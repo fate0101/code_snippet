@@ -1,4 +1,4 @@
-﻿#include "fcalloctor.h"
+﻿#include "fcallocator.h"
 
 
 #include <time.h>
@@ -58,7 +58,7 @@ void Test1() {
 
   F_SET_DBG(&m_env, inc_output_d);
 
-  if (!FC_SUCCESS(FInitAllocator(m_env))) {
+  if (!FC_SUCCESS(FConstructorAllocator(m_env))) {
     printf("init error\r\n");
     return;
   }
@@ -73,7 +73,7 @@ void Test1() {
     m_env.FDeallocate(m_env, t);
   }
 
-  FDestoryAllocator(m_env);
+  FDeconstructionAllocator(m_env);
 
 #ifndef FC_MEM_DBG
   printf("mf_count : %zd\r\n", mf_count);
@@ -88,7 +88,7 @@ void Test2() {
 
   M_ENV m_env = { 0 };
 
-  if (!FC_SUCCESS(FInitAllocator(m_env))) {
+  if (!FC_SUCCESS(FConstructorAllocator(m_env))) {
     printf("init error\r\n");
     return;
   }
@@ -103,7 +103,7 @@ void Test2() {
     m_env.FDeallocate(m_env, t);
   }
 
-  FDestoryAllocator(m_env);
+  FDeconstructionAllocator(m_env);
   system("pause");
 }
 #endif

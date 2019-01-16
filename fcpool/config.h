@@ -31,6 +31,11 @@
 #define FC_MEM_DBG
 
 /*
+  是否启用多线程 , 未完成
+*/
+// #define MULTI_THREAD
+
+/*
   来自 fcerr
 */
 enum ERROR_CODE {
@@ -40,5 +45,7 @@ enum ERROR_CODE {
 };
 
 #define FC_SUCCESS(x) (x >= F_OK)
+
+#include "fclock.h"
 
 #endif  // config_h
