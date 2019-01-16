@@ -2,16 +2,18 @@
 
 #include <string.h>
 
-#ifdef FC_MEM_DBG
 #ifdef FC_MEM_DEFAULT
 
 #include <stdio.h>
 #include <stdarg.h>
 
+#endif  // FC_MEM_DEFAULT
+
+#ifdef FC_MEM_DBG
+
 // mf 计数器
 size_t mf_count = 0;
 
-#endif  // FC_MEM_DEFAULT
 #endif  // FC_MEM_DBG
 
 static void* ins_malloc(PM_ENV m_env, size_t s)
@@ -390,8 +392,6 @@ static F_STAT_FREE(ins_free_d, p) {
   free(p);
 }
 
-#endif  // FC_MEM_DEFAULT
-
 #ifdef FC_MEM_DBG
 static void inc_output_d(const char* fmt, ...) {
 	va_list vArgList;
@@ -400,6 +400,8 @@ static void inc_output_d(const char* fmt, ...) {
 	va_end(vArgList);
 }
 #endif  // FC_MEM_DBG
+
+#endif  // FC_MEM_DEFAULT
 
 
 int InitAllocator(PM_ENV m_env) {
@@ -475,4 +477,5 @@ void DestoryAllocator(PM_ENV m_env) {
   }
 
   F_DBG(m_env, "mf_count : %d\r\n", mf_count);
+
 }
