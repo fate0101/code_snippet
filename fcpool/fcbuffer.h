@@ -3,14 +3,7 @@
 
 #include "config.h"
 #include "fclock.h"
-
-enum CSTR{
-  IN_STACK = 0x0001,
-  IN_HEAP  = 0x0002,
-
-  IN_MULTI_THREAD   = 0x0010,
-  IN_SINGLE_THREAD  = 0x0020,
-};
+#include "fcobject.h"
 
 /*
   虽然叫 string ,但是不以 0 结尾
@@ -38,8 +31,8 @@ typedef struct __string {
     size_t         *ref_cout_;                                            // 引用计数
     size_t         len;
     unsigned short flag;                                                  // IN_STACK
-    F_STAT_LOCK_WITHOUT_SEM                                                           // 快速声明 lock
 
+    F_STAT_LOCK_WITHOUT_SEM                                               // 快速声明 lock
   } ins;
 }*string_ptr;
 
@@ -76,10 +69,10 @@ void       DeconstructionString(string_ptr ts);
 
 #define F_STRING(x)      N_ConstructorString(x, IN_SINGLE_THREAD)
 
-#ifdef MULTI_THREAD
+#ifdef  MULTI_THREAD
 #define F_STRING_SAFE(x) N_ConstructorString(x, IN_MULTI_THREAD)
 #endif
 
-#define F_DSTRING(x)    DeconstructionString(x)
+#define F_DSTRING(x)     DeconstructionString(x)
 
 #endif

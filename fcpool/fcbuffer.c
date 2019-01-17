@@ -274,12 +274,12 @@ static size_t  ins_Write_lock(struct __string* ts, char* p, size_t s) {
   FC_LOCK_END(ts);
   return ret;
 }
-#endif
+#endif  // MULTI_THREAD
 
 string_ptr N_ConstructorString(void* allocator, unsigned short flag) {
   #ifdef FC_ASSERT
     assert(NULL != allocator);
-  #endif
+  #endif  // FC_ASSERT
   string_ptr ts = ALLOCATOR(allocator)->Allocate(allocator, sizeof(struct __string));
   memset(ts, 0, sizeof(struct __string));
 
@@ -300,7 +300,7 @@ string_ptr N_ConstructorString(void* allocator, unsigned short flag) {
     ts->GetBuffer_thread_unsafe = ins_GetBuffer;
   }                      
   else {                 
-#endif                   
+#endif  // MULTI_THREAD             
                          
     ts->AppendBuffer     = ins_AppendBuffer;
     ts->AppendRune       = ins_AppendRune;
@@ -314,7 +314,7 @@ string_ptr N_ConstructorString(void* allocator, unsigned short flag) {
     ts->GetBuffer_thread_unsafe = ins_GetBuffer;
 #ifdef MULTI_THREAD
   }
-#endif
+#endif  // MULTI_THREAD    
   return ts;
 }
 
@@ -330,15 +330,15 @@ string_ptr N_ConstructorStringWithBuffer(void* allocator, unsigned short flag, c
   return ts;
 }
 
-// 可能出现直接使用buffer的情况, 由于把 buffer作为一个首地址指针造成
-// 可以安排多个buffer指针 <分别指向头尾 和 当前位置>, 提供实用性
-// 这个函数为构建二级池提供可能, 目前没这样做，标记为不安全
-string_ptr N_ConstructorStringWithSize_unsafe(void* allocator, unsigned short flag, size_t s) {
-  string_ptr ts = N_ConstructorString(allocator, flag);
-  ts->ins.ref_cout_ = iins_new_ref_cout(ts);
-  GET_TS_REF(ts) = 1;
-  ts->ins._00oo00_buffer = GET_TS_ALLCATOR(ts)->Allocate(GET_TS_ALLCATOR(ts), ts->ins.len + s);
-  memset(ts->ins._00oo00_buffer, 0, s);
+// 深拷贝, 默认不提供
+string_ptr N_ConstructorStringWithString_C(string_ptr sts) {
+  string_ptr ts;
+
+  // 无法保证锁不被释放, 这是个死循环
+  FC_LOCK_BEGIN(sts);
+  ts = N_ConstructorString(GET_TS_ALLCATOR(sts), sts->ins.flag);
+  ins_AppendBuffer(ts,  sts->ins._00oo00_buffer, sts->ins.len);
+  FC_LOCK_END(sts);
   return ts;
 }
 
@@ -360,6 +360,18 @@ string_ptr N_ConstructorStringWithString(string_ptr sts) {
 
 __ret:
   FC_LOCK_END(sts);
+  return ts;
+}
+
+// 可能出现直接使用buffer的情况, 由于把 buffer作为一个首地址指针造成
+// 可以安排多个buffer指针 <分别指向头尾 和 当前位置>, 提供实用性
+// 这个函数为构建二级池提供可能, 目前没这样做，标记为不安全
+string_ptr N_ConstructorStringWithSize_unsafe(void* allocator, unsigned short flag, size_t s) {
+  string_ptr ts = N_ConstructorString(allocator, flag);
+  ts->ins.ref_cout_ = iins_new_ref_cout(ts);
+  GET_TS_REF(ts) = 1;
+  ts->ins._00oo00_buffer = GET_TS_ALLCATOR(ts)->Allocate(GET_TS_ALLCATOR(ts), ts->ins.len + s);
+  memset(ts->ins._00oo00_buffer, 0, s);
   return ts;
 }
 
