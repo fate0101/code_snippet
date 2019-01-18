@@ -23,7 +23,7 @@ typedef struct __string {
   // 线程非安全的
   const char* (*GetBuffer_thread_unsafe) (struct __string* ts);
   // 未实现的
-  void        (*AppendTS)         (struct __string* ts, struct __string* ts); 
+  void        (*AppendTS)         (struct __string* dts, struct __string* sts); 
 
   struct {
     void*          allocator;                                             // 减少头文件负担
