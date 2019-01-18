@@ -10,8 +10,7 @@
 */
 typedef struct __string {
   void        (*AppendBuffer)     (struct __string* ts, char* p, size_t s);
-  void        (*AppendString)     (struct __string* ts, char* p);
-  void        (*AppendTS)         (struct __string* ts, char* p, size_t s);
+  void        (*AppendString)     (struct __string* ts, char* p); 
   void        (*AppendRune)       (struct __string* ts, char c);
   void        (*Insert)           (struct __string* ts, size_t pos, char* p, size_t s);
   int         (*FindBuffer)       (struct __string* ts, size_t pos, char* p, size_t s);
@@ -23,6 +22,8 @@ typedef struct __string {
 
   // 线程非安全的
   const char* (*GetBuffer_thread_unsafe) (struct __string* ts);
+  // 未实现的
+  void        (*AppendTS)         (struct __string* ts, struct __string* ts); 
 
   struct {
     void*          allocator;                                             // 减少头文件负担
