@@ -1,6 +1,4 @@
 #include "buffer.h"
-#include <iostream>
-
 
 #include <iostream>
 #include "gtest/gtest.h"
@@ -21,7 +19,7 @@ TEST(TestRW, RWLen)
 
 	// TestWrite
 	a.write("123", 3);
-	a.write("人民币", 4);
+	a.write("脠脣脙帽卤脪", 4);
 	EXPECT_EQ(10, a.len());
 	EXPECT_EQ(10, a.size());
 
@@ -39,7 +37,7 @@ TEST(TestRW, RWLen)
 	EXPECT_EQ(0, a.size());
 
 	// TestFindSucess
-	EXPECT_EQ(3, b.find("人", 1));
+	EXPECT_EQ(3, b.find("脠脣", 1));
 
 	// TestRead
 	EXPECT_EQ(10, b.read(r, 20));
@@ -56,7 +54,7 @@ TEST(TestRW, RWLen)
 	EXPECT_EQ(3, b.size());
 
 	// TestFindFailed
-	EXPECT_EQ(-1, b.find("人", 1));
+	EXPECT_EQ(-1, b.find("脠脣", 1));
 
 	// TestMove
 	Buffer c;
